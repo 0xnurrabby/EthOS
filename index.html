@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Code</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 380px;
+            position: relative;
+            z-index: 1;
+        }
+        h2 {
+            margin-bottom: 25px;
+            font-size: 18px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 60px;
+            position: relative;
+        }
+        button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        .yes-btn {
+            background: #1da1f2;
+            color: white;
+        }
+        .no-btn {
+            background: #ccc;
+            color: #333;
+            /* STARTS as static (side by side) */
+            position: relative;
+        }
+        button:hover {
+            opacity: 0.85;
+        }
+        /* Popup styling */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 3;
+        }
+        .popup.show {
+            display: flex;
+            opacity: 1;
+        }
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 4;
+        }
+        .popup-content .btn-group {
+            height: 60px;
+            position: relative;
+            justify-content: center;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Greetings Dear @Ethereum_OS,<br>Can I get a code please 🥺 ?</h3>
+        <div class="btn-group">
+            <button class="yes-btn" onclick="openSecondPopup()">Yes</button>
+            <button class="no-btn" id="firstNoBtn">No</button>
+        </div>
+    </div>
+
+    <!-- First Popup -->
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <p>Maybe I'm just unlucky🥲<br>Can I request a code again?</p>
+            <button onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <!-- Second Popup -->
+    <div class="popup" id="secondPopup">
+        <div class="popup-content">
+            <p>Do you want to DM me on Twitter❤️?</p>
+            <div class="btn-group">
+                <button class="yes-btn" onclick="sendDM()">Yes</button>
+                <button class="no-btn" id="secondNoBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Popup -->
+    <div class="popup" id="msgPopup">
+        <div class="popup-content">
+            <p id="msgText"></p>
+            <button onclick="closeMsgPopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function showPopup() {
+            document.getElementById('popup').classList.add('show');
+        }
+        function closePopup() {
+            document.getElementById('popup').classList.remove('show');
+        }
+        function openSecondPopup() {
+            document.getElementById('secondPopup').classList.add('show');
+        }
+        function sendDM() {
+            window.open('https://x.com/0xnurrabby', '_blank');
+        }
+        function closeMsgPopup() {
+            document.getElementById('msgPopup').classList.remove('show');
+        }
+
+        // runaway button logic (full screen)
+        function makeRunaway(button) {
+            let moved = false;
+            button.addEventListener('mouseover', () => moveButton(button));
+            button.addEventListener('touchstart', () => moveButton(button));
+
+            function moveButton(btn) {
+                if (!moved) {
+                    btn.style.position = 'fixed'; // only switch after first hover/touch
+                    moved = true;
+                }
+                const maxX = window.innerWidth - btn.offsetWidth - 10;
+                const maxY = window.innerHeight - btn.offsetHeight - 10;
+                const randX = Math.random() * maxX;
+                const randY = Math.random() * maxY;
+                btn.style.left = randX + 'px';
+                btn.style.top = randY + 'px';
+            }
+        }
+
+        // click protection
+        document.getElementById('firstNoBtn').addEventListener('click', () => {
+            document.getElementById('msgText').innerText = "Please don't do this.😥";
+            document.getElementById('msgPopup').classList.add('show');
+        });
+        document.getElementById('secondNoBtn').addEventListener('click', () => {
+            document.getElementById('msgText').innerText = "Please don't do this😭";
+            document.getElementById('msgPopup').classList.add('show');
+        });
+
+        // make both No buttons run away
+        makeRunaway(document.getElementById('firstNoBtn'));
+        makeRunaway(document.getElementById('secondNoBtn'));
+    </script>
+</body>
+</html>
